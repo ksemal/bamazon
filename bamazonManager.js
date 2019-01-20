@@ -2,10 +2,23 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require("cli-table");
 
-var table = new Table({
-  head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "QTY"],
-  colWidths: [5, 40, 20, 10, 5]
-});
+var validInput = value => {
+  if (/\d/.test(value)) {
+    return true;
+  } else if (value === "q" || value === "Q") {
+    process.exit();
+  } else {
+    return "Please use numbers only!";
+  }
+};
+
+var exit = value => {
+  if (value === "q" || value === "Q") {
+    process.exit();
+  } else {
+    return true;
+  }
+};
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -48,9 +61,10 @@ function showOptions() {
           addToInventory();
           break;
         case "Add New Product":
-          addProduct();
+          addNewProduct();
           break;
         case "Exit":
+          connection.end();
           process.exit();
           break;
       }
@@ -58,6 +72,10 @@ function showOptions() {
 }
 
 function showProducts() {
+  var table = new Table({
+    head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "QTY"],
+    colWidths: [5, 40, 20, 10, 10]
+  });
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
     res.forEach(element => {
@@ -74,10 +92,13 @@ function showProducts() {
     console.log(table.toString());
     showOptions();
   });
-  connection.end();
 }
 
 function showLowInventory() {
+  var table = new Table({
+    head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "QTY"],
+    colWidths: [5, 40, 20, 10, 10]
+  });
   connection.query(
     "SELECT * FROM products WHERE ?? < ?",
     ["stock_quantity", "15"],
@@ -98,7 +119,94 @@ function showLowInventory() {
       showOptions();
     }
   );
-  connection.end();
 }
 
-function addToInventory() {}
+function addToInventory() {
+  inquirer
+    .prompt([
+      {
+        name: "id",
+        message: "Enter an item id you would like to add [Press Q to exit]",
+        validate: validInput
+      },
+      {
+        name: "qty",
+        message:
+          "Enter how many units of the product you would like to add [Press Q to exit]",
+        validate: validInput
+      }
+    ])
+    .then(answers => {
+      addToInventoryProcess(answers.id, answers.qty);
+    });
+}
+
+function addToInventoryProcess(id, qty) {
+  qty = parseInt(qty);
+  connection.query("SELECT * FROM products WHERE ?", { item_id: id }, function(
+    err,
+    res
+  ) {
+    if (err) throw err;
+    connection.query(
+      "UPDATE products SET ? WHERE ?",
+      [
+        {
+          stock_quantity: res[0].stock_quantity + qty
+        },
+        {
+          item_id: id
+        }
+      ],
+      function(err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + " product(s) updated!\n");
+        showOptions();
+      }
+    );
+  });
+}
+
+function addNewProduct() {
+  inquirer
+    .prompt([
+      {
+        name: "product",
+        message:
+          "Enter the name of a product you would like to add [Press Q to exit]",
+        validate: exit
+      },
+      {
+        name: "department",
+        message:
+          "Enter the department name you would like to add your product into [Press Q to exit]",
+        validate: exit
+      },
+      {
+        name: "price",
+        message: "Enter the price for new product [Press Q to exit]",
+        validate: validInput
+      },
+      {
+        name: "qty",
+        message:
+          "Enter how many items of the product you would like to add? [Press Q to exit]",
+        validate: validInput
+      }
+    ])
+    .then(answers => {
+      connection.query(
+        "INSERT INTO products SET ?",
+        {
+          product_name: answers.product,
+          department_name: answers.department,
+          price: answers.price,
+          stock_quantity: answers.qty
+        },
+        function(err, res) {
+          console.log(res.affectedRows + " product(s) inserted!\n");
+          showOptions();
+        }
+      );
+    });
+}

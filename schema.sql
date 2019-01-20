@@ -32,3 +32,15 @@ CREATE TABLE products
     ("Digital Kitchen Scale", "Home", 17.99, 6),
     ("Airbed", "Sports&Outdoors", 46.73, 24),
     ("Resistance Band", "Sports&Outdoors", 16.99, 125);
+
+  CREATE TABLE departments
+  (
+    department_id INT NOT NULL
+    AUTO_INCREMENT,
+    department_name VARCHAR
+    (100) NULL,
+    over_head_costs DECIMAL
+    (15,2),
+    PRIMARY KEY
+    (department_id)
+);
