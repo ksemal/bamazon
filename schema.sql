@@ -47,3 +47,15 @@ CREATE TABLE products
 
     ALTER TABLE products
 ADD product_sales DECIMAL(15,2) NULL;
+
+    ALTER TABLE products MODIFY COLUMN product_sales DECIMAL
+    (15,2) DEFAULT 0;
+
+    INSERT INTO departments
+      (department_name, over_head_costs)
+    VALUES
+      ("Electronics", 2005.00),
+      ("Clothing", 54.45),
+      ("Home", 24.75),
+      ("Arts&Crafts", 5),
+      ("Sports&Outdoors", 18.34);
