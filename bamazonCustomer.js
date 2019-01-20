@@ -34,7 +34,6 @@ connection.connect(function(err) {
 function showProducts() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
-    console.log(res);
     res.forEach(element => {
       var row = [];
       row.push(
