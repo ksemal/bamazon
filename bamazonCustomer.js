@@ -3,8 +3,15 @@ var inquirer = require("inquirer");
 var Table = require("cli-table");
 
 var table = new Table({
-  head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "QTY"],
-  colWidths: [5, 40, 20, 10, 5]
+  head: [
+    "ID",
+    "PRODUCT NAME",
+    "DEPARTMENT NAME",
+    "PRICE",
+    "QTY",
+    "PRODUCT SALES"
+  ],
+  colWidths: [5, 40, 20, 10, 10, 15]
 });
 
 var validInput = value => {
@@ -41,7 +48,8 @@ function showProducts() {
         element.product_name,
         element.department_name,
         element.price,
-        element.stock_quantity
+        element.stock_quantity,
+        element.product_sales
       );
       table.push(row);
     });
@@ -79,9 +87,7 @@ function readProducts(id, qty) {
     },
     function(err, res) {
       if (err) throw err;
-      console.log(res[0].stock_quantity);
       qty = parseInt(qty);
-      console.log(qty);
       if (res[0].stock_quantity >= qty) {
         customerOrder(qty, res[0].price, res[0].stock_quantity, res[0].item_id);
       } else {
@@ -93,13 +99,14 @@ function readProducts(id, qty) {
 
 function customerOrder(quantity, price, stockQty, id) {
   console.log("Your order is being processed \n");
-  console.log("Your total cost is: " + quantity * price);
+  console.log("Your total cost is: " + (quantity * price).toFixed(2));
 
   connection.query(
     "UPDATE products SET ? WHERE ?",
     [
       {
-        stock_quantity: stockQty - quantity
+        stock_quantity: stockQty - quantity,
+        product_sales: quantity * price
       },
       {
         item_id: id

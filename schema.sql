@@ -44,3 +44,6 @@ CREATE TABLE products
     PRIMARY KEY
     (department_id)
 );
+
+    ALTER TABLE products
+ADD product_sales DECIMAL(15,2) NULL;

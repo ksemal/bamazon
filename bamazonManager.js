@@ -73,8 +73,15 @@ function showOptions() {
 
 function showProducts() {
   var table = new Table({
-    head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "QTY"],
-    colWidths: [5, 40, 20, 10, 10]
+    head: [
+      "ID",
+      "PRODUCT NAME",
+      "DEPARTMENT NAME",
+      "PRICE",
+      "QTY",
+      "PRODUCT SALES"
+    ],
+    colWidths: [5, 40, 20, 10, 10, 15]
   });
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
@@ -85,7 +92,8 @@ function showProducts() {
         element.product_name,
         element.department_name,
         element.price,
-        element.stock_quantity
+        element.stock_quantity,
+        element.product_sales
       );
       table.push(row);
     });
@@ -96,8 +104,15 @@ function showProducts() {
 
 function showLowInventory() {
   var table = new Table({
-    head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "QTY"],
-    colWidths: [5, 40, 20, 10, 10]
+    head: [
+      "ID",
+      "PRODUCT NAME",
+      "DEPARTMENT NAME",
+      "PRICE",
+      "QTY",
+      "PRODUCT SALES"
+    ],
+    colWidths: [5, 40, 20, 10, 10, 15]
   });
   connection.query(
     "SELECT * FROM products WHERE ?? < ?",
@@ -111,7 +126,8 @@ function showLowInventory() {
           element.product_name,
           element.department_name,
           element.price,
-          element.stock_quantity
+          element.stock_quantity,
+          element.product_sales
         );
         table.push(row);
       });
