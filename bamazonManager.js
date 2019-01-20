@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require("cli-table");
+var departmentsList = [];
 
 var validInput = value => {
   if (/\d/.test(value)) {
@@ -184,6 +185,12 @@ function addToInventoryProcess(id, qty) {
 }
 
 function addNewProduct() {
+  connection.query("SELECT * FROM departments", function(err, res) {
+    if (err) throw err;
+    res.forEach(element => {
+      departmentsList.push(element.department_name);
+    });
+  });
   inquirer
     .prompt([
       {
@@ -194,9 +201,10 @@ function addNewProduct() {
       },
       {
         name: "department",
+        type: "list",
         message:
-          "Enter the department name you would like to add your product into [Press Q to exit]",
-        validate: exit
+          "Choose the department name you would like to add your product into",
+        choices: departmentsList
       },
       {
         name: "price",
