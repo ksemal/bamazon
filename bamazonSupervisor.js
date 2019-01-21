@@ -80,7 +80,6 @@ var Supervisor = function() {
       "SELECT departments.department_id, departments.department_name, departments.over_head_costs, SUM(products.product_sales), SUM(products.product_sales) - departments.over_head_costs AS total_profit FROM products RIGHT JOIN departments ON products.department_name = departments.department_name GROUP BY products.department_name, departments.department_id ORDER BY departments.department_id",
       function(err, res) {
         if (err) throw err;
-        console.log(res);
         res.forEach(element => {
           var row = [];
           if (element["SUM(products.product_sales)"] == null) {

@@ -94,7 +94,8 @@ var Customer = function() {
             qty,
             res[0].price,
             res[0].stock_quantity,
-            res[0].item_id
+            res[0].item_id,
+            res[0].product_sales
           );
         } else {
           console.log("Insufficient quantity!");
@@ -103,7 +104,7 @@ var Customer = function() {
     );
   }
 
-  function customerOrder(quantity, price, stockQty, id) {
+  function customerOrder(quantity, price, stockQty, id, sales) {
     console.log("Your order is being processed \n");
     console.log("Your total cost is: " + (quantity * price).toFixed(2));
 
@@ -112,7 +113,7 @@ var Customer = function() {
       [
         {
           stock_quantity: stockQty - quantity,
-          product_sales: quantity * price
+          product_sales: sales + quantity * price
         },
         {
           item_id: id

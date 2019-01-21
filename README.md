@@ -4,15 +4,14 @@ BAMAZON is an Amazon-like application that uses MySQL database. The app will tak
 
 ## How this app works
 
-### 1. First start
+Here is a link to the video showing how this app works:
+https://drive.google.com/file/d/157NagsepVBjyX60gMTS4xJ1lgFGYtT97/view
 
-![screenshot](assets/images/menu.gif)
+### 1. First start
 
 On the first load of the application you will see the menu to choose from depending on your needs
 
 ### 2. Customer
-
-![screenshot](assets/images/customer.gif)
 
 Here customers can place an order. The app displays all of the items available for sale and then prompt users with two messages:
 
@@ -22,8 +21,6 @@ Here customers can place an order. The app displays all of the items available f
 
 ### 3. Manager
 
-![screenshot](assets/images/manager.gif)
-
 In this part the user can see a set of menu options:
 
 - `View Products for Sale` The app will list every available item: the item IDs, names, prices, quantities, and product sales information.
@@ -32,8 +29,6 @@ In this part the user can see a set of menu options:
 - `Add New Product` It will allow the manager to add a completely new product to the store.
 
 ### 4. Superviser
-
-![screenshot](assets/images/superviser.gif)
 
 This will list a set of menu options:
 
